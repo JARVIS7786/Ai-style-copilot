@@ -1,4 +1,7 @@
 from fastapi import APIRouter, File, UploadFile,HTTPException
+import os
+import json
+import uuid
 
 from app.services.vision_service import VisionService
 
@@ -16,6 +19,8 @@ ALLOWED_IMAGE_TYPES= {
 }
 
 MAX_FILE_SIZE = 10*1024*1024 #10MB
+
+os.makedirs("test_storage_data",exist_ok=True)
 
 @router.post("/analyze")
 async def analyze_style(image: UploadFile = File(...)):
@@ -40,12 +45,23 @@ async def analyze_style(image: UploadFile = File(...)):
                 image_bytes= image_bytes,
                 mime_type = image.content_type
             )
-    
+
+        unique_id = str(uuid.uuid4())[:6]
+        safe_filename = f"{unique_id}_{image.filename}"
+        
+        with open(f"test_data_storage/{safe_filename}","wb")as f:
+            f.write(image_bytes)
+            
+        with open("test_data_storage/accuracy_results.json","a")as f:
+            log_data = {
+                "id":unique_id,
+                "filename":safe_filename,
+                "ai_result":result.model_dump()
+            }
+            f.write(json.dumps(log_data)+"\n")
+        
+        return result
     
         return result
-    except Exception as exc:
-        raise HTTPException(
-            status_code=502,
-            detail="Vision analysis failed. Please try again",
-            
-        )from exc
+    except Exception as exc: #[cite: 1]
+        raise HTTPException(status_code=502, detail=f"Vision analysis failed: {str(exc)}")

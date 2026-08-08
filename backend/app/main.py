@@ -15,7 +15,11 @@ app.add_middleware(
     allow_headers=["*"],
     
 )
-
+@app.get("/")
+async def root():
+    return{
+        "message":"welcome to AI style Copilot !!",
+        "docs":"Visit /docs to see API documentation"}
 
 @app.get("/health")
 async def health_check():
