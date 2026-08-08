@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Frontend
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Local data
+uploads/
+tmp/
+data/
+
+# Secrets / credentials
+*.pem
+*.key
+credentials.json
+
+# Model files
+*.gguf
+*.pt
+*.pth
+*.safetensors
